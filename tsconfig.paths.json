@@ -3,6 +3,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@kb-labs/infra-worker-contracts": [
+        "packages/plugin-template-contracts/src/index.ts"
+      ],
+      "@kb-labs/infra-worker-contracts/*": [
+        "packages/plugin-template-contracts/src/*"
+      ],
       "@kb-labs/plugin-contracts": [
         "../kb-labs-plugin/packages/plugin-contracts/src/index.ts"
       ],
@@ -14,12 +20,6 @@
       ],
       "@kb-labs/plugin-runtime/*": [
         "../kb-labs-plugin/packages/plugin-runtime/src/*"
-      ],
-      "@kb-labs/plugin-template-contracts": [
-        "packages/plugin-template-contracts/src/index.ts"
-      ],
-      "@kb-labs/plugin-template-contracts/*": [
-        "packages/plugin-template-contracts/src/*"
       ],
       "@kb-labs/sdk": [
         "../kb-labs-sdk/packages/sdk/src/index.ts"

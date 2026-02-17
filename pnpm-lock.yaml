@@ -11,6 +11,9 @@ importers:
       '@kb-labs/devkit':
         specifier: link:../kb-labs-devkit
         version: link:../kb-labs-devkit
+      '@types/node':
+        specifier: ^24.3.3
+        version: 24.10.4
       '@typescript-eslint/eslint-plugin':
         specifier: ^8
         version: 8.46.2(@typescript-eslint/parser@8.46.2(eslint@9.38.0)(typescript@5.9.3))(eslint@9.38.0)(typescript@5.9.3)
@@ -69,9 +72,12 @@ importers:
 
   packages/plugin-template-core:
     dependencies:
-      '@kb-labs/plugin-template-contracts':
+      '@kb-labs/infra-worker-contracts':
         specifier: link:../plugin-template-contracts
         version: link:../plugin-template-contracts
+      '@kb-labs/plugin-contracts':
+        specifier: link:../../../kb-labs-plugin/packages/plugin-contracts
+        version: link:../../../kb-labs-plugin/packages/plugin-contracts
       '@kb-labs/sdk':
         specifier: link:../../../kb-labs-sdk/packages/sdk
         version: link:../../../kb-labs-sdk/packages/sdk

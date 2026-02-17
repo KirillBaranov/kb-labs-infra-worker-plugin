@@ -1,9 +1,9 @@
 {
-  "name": "@kb-labs/plugin-template-core",
+  "name": "@kb-labs/infra-worker-core",
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "description": "Reference plugin package for KB Labs plugin template with manifest, CLI, REST, and Studio layers.",
+  "description": "Infra worker plugin core for workspace/environment/snapshot lifecycle operations.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -15,20 +15,7 @@
       "import": "./dist/manifest.v3.js",
       "types": "./dist/manifest.v3.d.ts"
     },
-    "./plugin-manifest-v2": {
-      "import": "./dist/manifest.v2.js",
-      "types": "./dist/manifest.v2.d.ts"
-    },
     "./cli": "./dist/cli/index.js",
-    "./rest": "./dist/rest/index.js",
-    "./studio": "./dist/studio/index.js",
-    "./core": "./dist/core/index.js",
-    "./utils": "./dist/utils/index.js",
-    "./lifecycle": "./dist/lifecycle/index.js",
-    "./studio/widgets/hello": {
-      "import": "./dist/studio/widgets/hello-widget.js",
-      "types": "./dist/studio/widgets/hello-widget.d.ts"
-    },
     "./dist/*": "./dist/*"
   },
   "kb": {
@@ -41,7 +28,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "pretype-check": "pnpm --filter @kb-labs/plugin-template-core build",
+    "pretype-check": "pnpm --filter @kb-labs/infra-worker-core build",
     "clean": "rimraf dist",
     "build": "tsup --config tsup.config.ts",
     "dev": "tsup --config tsup.config.ts --watch",
@@ -52,8 +39,8 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@kb-labs/plugin-contracts": "workspace:*",
-    "@kb-labs/plugin-template-contracts": "link:../plugin-template-contracts",
+    "@kb-labs/plugin-contracts": "link:../../../kb-labs-plugin/packages/plugin-contracts",
+    "@kb-labs/infra-worker-contracts": "link:../plugin-template-contracts",
     "@kb-labs/sdk": "link:../../../kb-labs-sdk/packages/sdk",
     "react": "^18.3.1",
     "zod": "^3.23.8"

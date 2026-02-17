@@ -1,8 +1,8 @@
 {
-  "name": "@kb-labs/plugin-template",
+  "name": "@kb-labs/infra-worker-plugin",
   "version": "0.1.0",
   "private": true,
-  "description": "Reference plugin template for the KB Labs ecosystem with devkit-powered tooling.",
+  "description": "Infra worker plugin for capability-first workspace/environment/snapshot orchestration.",
   "type": "module",
   "author": {
     "name": "Kirill Baranov",
@@ -34,9 +34,9 @@
     "devkit:help": "node scripts/devkit-sync.mjs --help",
     "postinstall": "pnpm -s devkit:sync || true",
     "// ——— core": "────────────────────────────────────────",
-    "build": "pnpm -r --filter ./packages/... run build",
-    "build:clean": "pnpm -r --filter ./packages/... run clean && pnpm run build",
-    "dev": "pnpm -r --parallel --filter ./packages/... run dev",
+    "build": "pnpm --filter @kb-labs/infra-worker-contracts build && pnpm --filter @kb-labs/infra-worker-core build",
+    "build:clean": "pnpm --filter @kb-labs/infra-worker-contracts clean && pnpm --filter @kb-labs/infra-worker-core clean && pnpm run build",
+    "dev": "pnpm --parallel --filter @kb-labs/infra-worker-contracts --filter @kb-labs/infra-worker-core run dev",
     "// ——— quality": "────────────────────────────────────────",
     "lint": "pnpm -r exec eslint .",
     "lint:fix": "pnpm -r exec eslint . --fix",
