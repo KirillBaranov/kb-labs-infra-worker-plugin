@@ -1,3 +1,3 @@
-// V3: Export default exports from commands
-export { default as helloCommand } from './hello.js';
-export { default as testLoaderCommand } from './test-loader.js';
+export { default as prepareInfraCommand } from './prepare-infra.js';
+export { default as captureSnapshotCommand } from './capture-snapshot.js';
+export { default as restoreSnapshotCommand } from './restore-snapshot.js';
