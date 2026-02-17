@@ -1,100 +1,81 @@
 import type { PluginContracts } from './types';
 import { contractsSchemaId, contractsVersion } from './version';
 
-// Level 2: Contracts типизация с as const для извлечения типов
 export const pluginContractsManifest = {
   schema: contractsSchemaId,
-  pluginId: '@kb-labs/plugin-template',
+  pluginId: '@kb-labs/infra-worker',
   contractsVersion,
   artifacts: {
-    'template.hello.greeting': {
-      id: 'template.hello.greeting',
+    'infra.prepare.result': {
+      id: 'infra.prepare.result',
       kind: 'json',
-      description: 'Machine-readable greeting payload returned by the hello surfaces.',
-      pathPattern: 'artifacts/template/hello/greeting.json',
+      description: 'Result payload for infra preparation command.',
+      pathPattern: 'artifacts/infra/prepare/result.json',
       mediaType: 'application/json',
-      schemaRef: '@kb-labs/plugin-template-contracts/schema#HelloGreeting',
+      schemaRef: '@kb-labs/infra-worker-contracts/schema#PrepareInfraOutput',
       example: {
-        summary: 'Greeting payload for anonymous user',
+        summary: 'Infra prepare output',
         payload: {
-          message: 'Hello, World!',
-          target: 'World'
-        }
-      }
-    },
-    'template.hello.log': {
-      id: 'template.hello.log',
-      kind: 'log',
-      description: 'Execution log for hello command/workflow.',
-      pathPattern: 'logs/template/hello/run.log',
-      mediaType: 'text/plain'
+          workspaceId: 'ws_123',
+          environmentId: 'env_456',
+          snapshotId: 'snap_789',
+        },
+      },
     }
   },
   commands: {
-    'plugin-template:hello': {
-      id: 'plugin-template:hello',
-      description: 'Produce a greeting message optionally targeting a provided name.',
+    'infra-worker:prepare': {
+      id: 'infra-worker:prepare',
+      description: 'Materialize workspace and optionally provision environment/snapshot.',
       input: {
-        ref: '@kb-labs/plugin-template-contracts/schema#HelloCommandInput',
+        ref: '@kb-labs/infra-worker-contracts/schema#PrepareInfraInput',
         format: 'zod'
       },
       output: {
-        ref: '@kb-labs/plugin-template-contracts/schema#HelloCommandOutput',
+        ref: '@kb-labs/infra-worker-contracts/schema#PrepareInfraOutput',
         format: 'zod'
       },
-      produces: ['template.hello.greeting', 'template.hello.log'],
-      examples: ['kb plugin-template hello', 'kb plugin-template hello --name Dev', 'kb plugin-template hello --json']
+      produces: ['infra.prepare.result'],
+      examples: ['kb infra-worker prepare --sourceRef repo://main --basePath /workspace/main']
     },
-    'plugin-template:test-loader': {
-      id: 'plugin-template:test-loader',
-      description: 'Test UI loader/spinner functionality with various scenarios.',
+    'infra-worker:capture-snapshot': {
+      id: 'infra-worker:capture-snapshot',
+      description: 'Capture snapshot for workspace/environment.',
       input: {
-        ref: '@kb-labs/plugin-template-contracts/schema#TestLoaderCommandInput',
+        ref: '@kb-labs/infra-worker-contracts/schema#CaptureSnapshotInput',
         format: 'zod'
       },
       output: {
-        ref: '@kb-labs/plugin-template-contracts/schema#TestLoaderCommandOutput',
+        ref: '@kb-labs/infra-worker-contracts/schema#CaptureSnapshotOutput',
         format: 'zod'
       },
       produces: [],
-      examples: ['kb plugin-template test-loader', 'kb plugin-template test-loader --duration 1000', 'kb plugin-template test-loader --fail']
+      examples: ['kb infra-worker capture-snapshot --workspaceId ws_123 --namespace runs/main']
+    },
+    'infra-worker:restore-snapshot': {
+      id: 'infra-worker:restore-snapshot',
+      description: 'Restore snapshot to workspace/environment.',
+      input: {
+        ref: '@kb-labs/infra-worker-contracts/schema#RestoreSnapshotInput',
+        format: 'zod'
+      },
+      output: {
+        ref: '@kb-labs/infra-worker-contracts/schema#RestoreSnapshotOutput',
+        format: 'zod'
+      },
+      produces: [],
+      examples: ['kb infra-worker restore-snapshot --snapshotId snap_789 --workspaceId ws_123']
     }
   },
-  workflows: {
-    'template.workflow.hello': {
-      id: 'template.workflow.hello',
-      description: 'Single-step workflow executing the hello command and emitting greeting artifacts.',
-      produces: ['template.hello.greeting', 'template.hello.log'],
-      steps: [
-        {
-          id: 'template.workflow.hello.step.run-command',
-          commandId: 'plugin-template:hello',
-          produces: ['template.hello.greeting', 'template.hello.log']
-        }
-      ]
-    }
-  },
+  workflows: {},
   api: {
     rest: {
-      basePath: '/v1/plugins/template',
-      routes: {
-        'template.rest.hello': {
-          id: 'template.rest.hello',
-          method: 'GET',
-          path: '/hello',
-          description: 'Return a greeting payload from the REST surface.',
-          response: {
-            ref: '@kb-labs/plugin-template-contracts/schema#HelloCommandOutput',
-            format: 'zod'
-          },
-          produces: ['template.hello.greeting']
-        }
-      }
-    }
-  }
+      basePath: '/v1/plugins/infra-worker',
+      routes: {},
+    },
+  },
 } as const satisfies PluginContracts;
 
-// Извлекаем типы для использования в других местах
 export type PluginArtifactIds = keyof typeof pluginContractsManifest.artifacts;
 export type PluginCommandIds = keyof typeof pluginContractsManifest.commands;
 export type PluginWorkflowIds = keyof typeof pluginContractsManifest.workflows;
@@ -103,4 +84,3 @@ export type PluginRouteIds = typeof pluginContractsManifest.api extends { rest: 
     ? keyof R
     : never
   : never;
-
