@@ -21,6 +21,29 @@ interface PrepareInfraResult {
   snapshotId?: string;
 }
 
+function toBoolean(value: unknown): boolean | undefined {
+  if (typeof value === 'boolean') {
+    return value;
+  }
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    if (normalized === 'true') {return true;}
+    if (normalized === 'false') {return false;}
+  }
+  return undefined;
+}
+
+function toNumber(value: unknown): number | undefined {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value;
+  }
+  if (typeof value === 'string' && value.trim().length > 0) {
+    const parsed = Number(value);
+    if (Number.isFinite(parsed)) {return parsed;}
+  }
+  return undefined;
+}
+
 export default defineCommand<unknown, PrepareInfraInput, PrepareInfraResult>({
   id: 'infra-worker:prepare',
   description: 'Materialize workspace, optionally provision environment, optionally capture snapshot.',
@@ -30,16 +53,20 @@ export default defineCommand<unknown, PrepareInfraInput, PrepareInfraResult>({
       input: PrepareInfraInput
     ): Promise<CommandResult<PrepareInfraResult>> {
       const flags = input.flags;
+      const createEnvironment = toBoolean(flags.createEnvironment) ?? false;
+      const captureSnapshot = toBoolean(flags.captureSnapshot) ?? false;
+      const ttlMs = toNumber(flags.ttlMs);
+
       const workspace = await ctx.api.workspace.materialize({
         sourceRef: flags.sourceRef,
         basePath: flags.basePath,
       });
 
       let environmentId: string | undefined;
-      if (flags.createEnvironment) {
+      if (createEnvironment) {
         const environment = await ctx.api.environment.create({
           templateId: flags.templateId,
-          ttlMs: flags.ttlMs,
+          ttlMs,
           workspacePath: workspace.rootPath ?? flags.basePath,
         });
         environmentId = environment.environmentId;
@@ -50,7 +77,7 @@ export default defineCommand<unknown, PrepareInfraInput, PrepareInfraResult>({
       }
 
       let snapshotId: string | undefined;
-      if (flags.captureSnapshot) {
+      if (captureSnapshot) {
         const snapshot = await ctx.api.snapshot.capture({
           workspaceId: workspace.workspaceId,
           environmentId,

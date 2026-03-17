@@ -39,15 +39,15 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@kb-labs/plugin-contracts": "link:../../../kb-labs-plugin/packages/plugin-contracts",
+    "@kb-labs/plugin-contracts": "workspace:*",
     "@kb-labs/infra-worker-contracts": "link:../plugin-template-contracts",
-    "@kb-labs/sdk": "link:../../../kb-labs-sdk/packages/sdk",
+    "@kb-labs/sdk": "workspace:*",
     "react": "^18.3.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@kb-labs/devkit": "link:../../../kb-labs-devkit",
-    "@kb-labs/plugin-runtime": "link:../../../kb-labs-plugin/packages/plugin-runtime",
+    "@kb-labs/devkit": "workspace:*",
+    "@kb-labs/plugin-runtime": "workspace:*",
     "@types/node": "^24.3.3",
     "@types/react": "^18.3.8",
     "@types/react-dom": "^18.3.0",
