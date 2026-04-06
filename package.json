@@ -1,7 +1,6 @@
 {
   "name": "@kb-labs/infra-worker-plugin",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.2.0",
   "description": "Infra worker plugin for capability-first workspace/environment/snapshot orchestration.",
   "type": "module",
   "author": {
